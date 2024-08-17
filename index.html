@@ -44,10 +44,15 @@
     #status-bar.inactive {
       background-color: red;
     }
+
+    #chat {
+      display: none; /* Hide chat interface */
+    }
   </style>
 </head>
 <body>
   <div id="status-bar" class="inactive">Mic Off</div>
+  <div id="chat"></div> <!-- Chat interface remains in the DOM but hidden -->
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
