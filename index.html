@@ -1,25 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aitek Live</title>
-  </head>
-  <body>
-    <div id="app">
-      <div id="btn-container">
-        <button id="start-btn">Start</button>
-        <button id="stop-btn" disabled="true">Stop</button>
-      </div>
-      <div id="heading-container">
-        <h2></h2>
-        <p>
-          
-          
-        </p>
-      </div>
-      <div id="chat"></div>
-    </div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aitek Live</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      display: flex;
+      flex-direction: column; /* Align items vertically */
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: url('https://aitek.site/obra/asset.bg.gif') no-repeat center center fixed;
+      background-size: cover;
+      cursor: pointer;
+    }
+
+    #status-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.2em;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    }
+
+    #status-bar.active {
+      background-color: green;
+    }
+
+    #status-bar.inactive {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="status-bar" class="inactive">Mic Off</div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let conversationActive = false;
+      let stream;
+      const statusBar = document.getElementById('status-bar');
+
+      function startConversation() {
+        if (conversationActive) return;
+        
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(mediaStream => {
+            stream = mediaStream;
+            conversationActive = true;
+            console.log('Microphone access granted. Conversation started...');
+            updateStatus('active', 'Mic On');
+          })
+          .catch(error => {
+            console.error('Microphone access denied:', error);
+          });
+      }
+
+      function stopConversation() {
+        if (!conversationActive) return;
+        
+        if (stream) {
+          const tracks = stream.getTracks();
+          tracks.forEach(track => track.stop());
+        }
+        conversationActive = false;
+        console.log('Conversation stopped.');
+        updateStatus('inactive', 'Mic Off');
+      }
+
+      function updateStatus(status, text) {
+        statusBar.className = status;
+        statusBar.textContent = text;
+      }
+
+      document.body.addEventListener('click', () => {
+        if (conversationActive) {
+          stopConversation();
+        } else {
+          startConversation();
+        }
+      });
+    });
+  </script>
+</body>
 </html>
