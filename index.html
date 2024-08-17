@@ -22,20 +22,6 @@
       cursor: pointer;
     }
 
-    #btn-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    #start-stop-btn {
-      width: 100px;
-      height: 100px;
-      cursor: pointer;
-      border: none;
-      background: none;
-    }
-
     #chat {
       display: flex;
       flex-direction: column;
@@ -73,36 +59,34 @@
 </head>
 <body>
   <div id="app">
-    <div id="btn-container">
-      <img id="start-stop-btn" src="https://i.pinimg.com/originals/44/a5/2c/44a52caf835ad2d687e4d67ec8016632.gif" alt="Start/Stop Conversation">
-    </div>
     <div id="chat"></div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const startStopButton = document.getElementById('start-stop-btn');
       let conversationActive = false;
 
-      startStopButton.addEventListener('click', () => {
-        if (!conversationActive) {
-          startConversation();
-        } else {
-          stopConversation();
-        }
-      });
-
+      // Request microphone access and start the conversation automatically
       function startConversation() {
-        conversationActive = true;
-        console.log('Conversation started...');
-        // Perform any additional start actions here
+        navigator.mediaDevices.getUserMedia({ audio: true })
+          .then(stream => {
+            conversationActive = true;
+            console.log('Microphone access granted. Conversation started...');
+            // Implement any additional actions here, like connecting to your voice API
+          })
+          .catch(error => {
+            console.error('Microphone access denied:', error);
+          });
       }
 
       function stopConversation() {
         conversationActive = false;
         console.log('Conversation stopped.');
-        // Perform any additional stop actions here
+        // Implement any additional stop actions here
       }
+
+      // Automatically start the conversation on page load
+      startConversation();
     });
   </script>
 </body>
