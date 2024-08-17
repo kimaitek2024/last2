@@ -1,25 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aitek Live</title>
-  </head>
-  <body>
-    <div id="app">
-      <div id="btn-container">
-        <button id="start-btn">Start</button>
-        <button id="stop-btn" disabled="true">Stop</button>
-      </div>
-      <div id="heading-container">
-        <h2></h2>
-        <p>
-          
-          
-        </p>
-      </div>
-      <div id="chat"></div>
-    </div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aitek Live</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: url('your-gif-url.gif') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    #btn-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    .btn-icon {
+      font-size: 60px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-icon:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="btn-container">
+    <span id="start-btn" class="btn-icon material-icons">play_circle_filled</span>
+    <span id="stop-btn" class="btn-icon material-icons" disabled="true">stop_circle</span>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const startButton = document.getElementById('start-btn');
+      const stopButton = document.getElementById('stop-btn');
+      let conversationActive = false;
+
+      startButton.addEventListener('click', () => {
+        if (!conversationActive) {
+          startConversation();
+          startButton.setAttribute('disabled', true);
+          stopButton.removeAttribute('disabled');
+        }
+      });
+
+      stopButton.addEventListener('click', () => {
+        if (conversationActive) {
+          stopConversation();
+          stopButton.setAttribute('disabled', true);
+          startButton.removeAttribute('disabled');
+        }
+      });
+
+      function startConversation() {
+        conversationActive = true;
+        console.log('Conversation started...');
+      }
+
+      function stopConversation() {
+        conversationActive = false;
+        console.log('Conversation stopped.');
+      }
+    });
+  </script>
+</body>
 </html>
