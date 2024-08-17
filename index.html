@@ -17,13 +17,37 @@
       justify-content: center;
       align-items: center;
       font-family: Arial, sans-serif;
-      background: url('https://i.pinimg.com/originals/44/a5/2c/44a52caf835ad2d687e4d67ec8016632.gif') no-repeat center center fixed;
+      background: url('https://aitek.site/obra/asset.bg.gif') no-repeat center center fixed;
       background-size: cover;
       cursor: pointer;
     }
 
-    #chat {
+    #app {
       display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      position: relative;
+    }
+
+    #startPrompt {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 1.5em;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    #chat {
+      display: none; /* Initially hidden */
       flex-direction: column;
       height: 100%; /* Full height */
       overflow-y: auto;
@@ -59,18 +83,21 @@
 </head>
 <body>
   <div id="app">
+    <div id="startPrompt">Tap to Start</div>
     <div id="chat"></div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      let conversationActive = false;
+      const startPrompt = document.getElementById('startPrompt');
+      const chat = document.getElementById('chat');
 
-      // Request microphone access and start the conversation automatically
+      // Function to start the conversation
       function startConversation() {
         navigator.mediaDevices.getUserMedia({ audio: true })
           .then(stream => {
-            conversationActive = true;
+            startPrompt.style.display = 'none'; // Hide the prompt
+            chat.style.display = 'flex'; // Show the chat
             console.log('Microphone access granted. Conversation started...');
             // Implement any additional actions here, like connecting to your voice API
           })
@@ -79,14 +106,9 @@
           });
       }
 
-      function stopConversation() {
-        conversationActive = false;
-        console.log('Conversation stopped.');
-        // Implement any additional stop actions here
-      }
-
-      // Automatically start the conversation on page load
-      startConversation();
+      startPrompt.addEventListener('click', () => {
+        startConversation();
+      });
     });
   </script>
 </body>
